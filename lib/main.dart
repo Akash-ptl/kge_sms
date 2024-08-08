@@ -1,13 +1,12 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sms/global.dart';
 import 'package:sim_data/sim_data.dart';
-import 'package:cron/cron.dart';
-import 'package:logger/logger.dart';
+import 'package:sms/Home/messages.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +18,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -59,12 +58,21 @@ class _PermissionHandlerScreenState extends State<PermissionHandlerScreen> {
     if (Platform.isAndroid) {
       final SimData simData = await SimDataPlugin.getSimData();
       _simCard = simData.cards;
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => MyHomePage(
+            builder: (context) =>
+                // MyHomePage(
+                //   simCard: _simCard,
+                // )
+                MessageList(
                   simCard: _simCard,
-                )),
+                )
+            // MyHomePage(
+            //   simCard: _simCard,
+            // )
+            ),
       );
     }
   }
@@ -107,90 +115,5 @@ class _PermissionHandlerScreenState extends State<PermissionHandlerScreen> {
         ),
       ),
     );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.simCard});
-
-  final List<SimCard> simCard;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  bool start = false;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  final Logger logger = Logger();
-
-  Cron? cron;
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            setState(() {});
-            start = !start;
-
-            if (start == true) {
-              logger.d('Start');
-            } else {
-              logger.d('Stop');
-            }
-            if (start == true) {
-              cron = Cron();
-              cron!.schedule(Schedule.parse('*/1 * * * *'), () {
-                print(DateTime.now());
-                sendSms();
-              });
-            } else {
-              cron!.close();
-              cron = null;
-            }
-          },
-          child: (start == false)
-              ? const Icon(Icons.send)
-              : const Icon(Icons.stop),
-        ),
-        appBar: AppBar(
-          title: const Text(
-            'KGE Technologies',
-            style: TextStyle(fontFamily: 'helvetica'),
-          ),
-          centerTitle: true,
-          // leading: Image.network(
-          //     'https://raw.githubusercontent.com/kgetechnologies/kgesitecdn/kgetechnologies-com/images/KgeMain.png'),
-        ),
-        backgroundColor: Colors.white,
-        resizeToAvoidBottomInset: false,
-      ),
-    );
-  }
-
-  Future<void> sendSms() async {
-    String phoneNumber = '9328895180';
-    String message = 'KGE Technologies';
-
-    if (Platform.isAndroid) {
-      await Constants.nativeChannel.invokeMethod("sendSMS", {
-        "mobileNumber": phoneNumber,
-        "message": message,
-        "subscriptionId": widget.simCard[0].subscriptionId.toString(),
-      });
-    }
-    Map<String, dynamic> smsData = {
-      'phoneNumber': phoneNumber,
-      'message': message,
-      'sim': widget.simCard[0].subscriptionId.toString()
-    };
-    String jsonEncoded = json.encode(smsData);
-    print(jsonEncoded);
   }
 }
