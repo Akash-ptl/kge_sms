@@ -38,7 +38,13 @@ class _MessageListState extends State<MessageList> {
   @override
   void initState() {
     super.initState();
-
+    // cron = Cron();
+    // cron!.schedule(Schedule.parse('*/2 * * * *'), () async {
+    //   print(DateTime.now());
+    //   await SMSApi.sendApiRequest().then((value) async {
+    //     _loadData(2);
+    //   });
+    // });
     SMSApi.sendApiRequest().then((value) async {
       _loadData(1);
     });
@@ -72,13 +78,25 @@ class _MessageListState extends State<MessageList> {
                   SMSApi.getSMBDataList.value.rows?[0].type ?? '')
               .then(
             (value) async {
+              print('updateData :: ${value}');
               if (value) {
                 await SMSApi.updateData2(
-                  context,
-                  time.toString().trim(),
-                  SMSApi.getSMBDataList.value.rows?[0].uuid ?? '',
-                  DateTime.now().toLocal().toString(),
-                ).then((value) async {
+                        context,
+                        time.toString().trim(),
+                        SMSApi.getSMBDataList.value.rows?[0].uuid ?? '',
+                        DateTime.now().toLocal().toString(),
+                        1)
+                    .then((value) async {
+                  ///abc
+                });
+              } else {
+                await SMSApi.updateData2(
+                        context,
+                        time.toString().trim(),
+                        SMSApi.getSMBDataList.value.rows?[0].uuid ?? '',
+                        'INVALID NUMBER',
+                        2)
+                    .then((value) async {
                   ///abc
                 });
               }
@@ -90,27 +108,37 @@ class _MessageListState extends State<MessageList> {
       // );
     } else {
       sendSms('BAL', '199', '', '').then((value) async {
-        Future.delayed(Duration(minutes: 1)).then((value) async {
-          var permission = await Permission.sms.status;
-          if (permission.isGranted) {
-            final messages = await _query.querySms(
-              kinds: [
-                SmsQueryKind.inbox,
-                // SmsQueryKind.sent,
-              ],
-            );
-            await SMSApi.updateData3(
-                    context,
-                    SMSApi.getSMBDataList.value.rows?[0].sent ?? '',
-                    SMSApi.getSMBDataList.value.rows?[0].uuid ?? '',
-                    SMSApi.getSMBDataList.value.rows?[0].delivered ?? '',
-                    messages.first.body)
-                .then((value) async {});
-            setState(() => _messages.add(messages.first));
-          } else {
-            await Permission.sms.request();
-          }
-        });
+        if (value) {
+          Future.delayed(Duration(minutes: 1)).then((value) async {
+            var permission = await Permission.sms.status;
+            if (permission.isGranted) {
+              final messages = await _query.querySms(
+                kinds: [
+                  SmsQueryKind.inbox,
+                  // SmsQueryKind.sent,
+                ],
+              );
+              await SMSApi.updateData3(
+                      context,
+                      SMSApi.getSMBDataList.value.rows?[0].sent ?? '',
+                      SMSApi.getSMBDataList.value.rows?[0].uuid ?? '',
+                      SMSApi.getSMBDataList.value.rows?[0].delivered ?? '',
+                      messages.first.body)
+                  .then((value) async {});
+              setState(() => _messages.add(messages.first));
+            } else {
+              await Permission.sms.request();
+            }
+          });
+        } else {
+          await SMSApi.updateData3(
+                  context,
+                  SMSApi.getSMBDataList.value.rows?[0].sent ?? '',
+                  SMSApi.getSMBDataList.value.rows?[0].uuid ?? '',
+                  '',
+                  'INVALID NUMBER')
+              .then((value) async {});
+        }
       });
     }
   }
@@ -125,10 +153,11 @@ class _MessageListState extends State<MessageList> {
     try {
       if (Platform.isAndroid) {
         // Get the current SIM card
+
         final currentSim = widget.simCard[_simIndex];
         await Constants.nativeChannel.invokeMethod("sendSMS", {
-          // "mobileNumber": number == '199' ? '199' : number,
-          "mobileNumber": '1234567890',
+          "mobileNumber": number == '199' ? '199' : number,
+          // "mobileNumber": '111111111',
           // "mobileNumber": '9328895180',
           "message": number == '199'
               ? 'BAL'
@@ -153,13 +182,13 @@ class _MessageListState extends State<MessageList> {
       sentSmsCache[uuid] = true;
 
       // Show a success snackbar
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-              'SMS sent successfully to $number using SIM ${_simIndex + 1}!'),
-          duration: const Duration(seconds: 2),
-        ),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(
+      //         'SMS sent successfully to $number using SIM ${_simIndex + 1}!'),
+      //     duration: const Duration(seconds: 2),
+      //   ),
+      // );
 
       // Move to the next SIM card for the next SMS
       _simIndex = (_simIndex + 1) % widget.simCard.length;
@@ -167,13 +196,13 @@ class _MessageListState extends State<MessageList> {
       return true; // Return true if the SMS is sent successfully
     } catch (e) {
       // Show an error snackbar
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-              'Error sending SMS to $number using SIM ${_simIndex + 1}: $e'),
-          duration: const Duration(seconds: 2),
-        ),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(
+      //         'Error sending SMS to $number using SIM ${_simIndex + 1}: INVALID NUMBER'),
+      //     duration: const Duration(seconds: 2),
+      //   ),
+      // );
 
       // Move to the next SIM card for the next SMS
       _simIndex = (_simIndex + 1) % widget.simCard.length;
@@ -205,7 +234,7 @@ class _MessageListState extends State<MessageList> {
               }
               if (start == true) {
                 cron = Cron();
-                cron!.schedule(Schedule.parse('*/5 * * * *'), () async {
+                cron!.schedule(Schedule.parse('*/2 * * * *'), () async {
                   print(DateTime.now());
                   await SMSApi.sendApiRequest().then((value) async {
                     _loadData(2);
@@ -240,15 +269,15 @@ class _MessageListState extends State<MessageList> {
             child: const Icon(Icons.refresh),
           ),
           2.pw,
-          FloatingActionButton(
-            heroTag: 2,
-            child: const Icon(Icons.send),
-            onPressed: () async {
-              SMSApi.sendApiRequest().then((value) async {
-                _loadData(1);
-              });
-            },
-          ),
+          // FloatingActionButton(
+          //   heroTag: 2,
+          //   child: const Icon(Icons.send),
+          //   onPressed: () async {
+          //     SMSApi.sendApiRequest().then((value) async {
+          //       _loadData(1);
+          //     });
+          //   },
+          // ),
         ],
       ),
       body: Obx(() {
@@ -258,41 +287,42 @@ class _MessageListState extends State<MessageList> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount:
-                            SMSApi.getSMBDataList.value.rows?.length ?? 0,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          final data = SMSApi.getSMBDataList.value.rows?[index];
-                          return Card(
-                              child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 15),
-                            child: Container(
-                                // height: 50,
-                                child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  data?.deviceid ?? ' ',
-                                  style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                0.5.ph,
-                                Text('MsgText : ${data?.msgtext ?? ' '}'),
-                                0.5.ph,
-                                Text('To : ${data?.receiverid ?? ' '}'),
-                                0.5.ph,
-                                Text('From : ${data?.senderid ?? ' '}'),
-                                0.5.ph,
-                                Text('Type : ${data?.type ?? ' '}'),
-                              ],
-                            )),
-                          ));
-                        },
-                      ),
+                      10.ph,
+                      // ListView.builder(
+                      //   physics: NeverScrollableScrollPhysics(),
+                      //   itemCount:
+                      //       SMSApi.getSMBDataList.value.rows?.length ?? 0,
+                      //   shrinkWrap: true,
+                      //   itemBuilder: (context, index) {
+                      //     final data = SMSApi.getSMBDataList.value.rows?[index];
+                      //     return Card(
+                      //         child: Padding(
+                      //       padding: const EdgeInsets.symmetric(
+                      //           horizontal: 15, vertical: 15),
+                      //       child: Container(
+                      //           // height: 50,
+                      //           child: Column(
+                      //         crossAxisAlignment: CrossAxisAlignment.start,
+                      //         children: [
+                      //           Text(
+                      //             data?.deviceid ?? ' ',
+                      //             style: const TextStyle(
+                      //                 fontSize: 16,
+                      //                 fontWeight: FontWeight.bold),
+                      //           ),
+                      //           0.5.ph,
+                      //           Text('MsgText : ${data?.msgtext ?? ' '}'),
+                      //           0.5.ph,
+                      //           Text('To : ${data?.receiverid ?? ' '}'),
+                      //           0.5.ph,
+                      //           Text('From : ${data?.senderid ?? ' '}'),
+                      //           0.5.ph,
+                      //           Text('Type : ${data?.type ?? ' '}'),
+                      //         ],
+                      //       )),
+                      //     ));
+                      //   },
+                      // ),
                       Divider(
                         thickness: 3,
                       ),

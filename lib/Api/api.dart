@@ -60,19 +60,19 @@ class SMSApi {
           await http.post(Uri.parse(url), headers: headers, body: body);
       final jsonData = json.decode(response.body);
       if (jsonData['STATUS'] != 'error') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(jsonData['TEXT'].toString()),
-            backgroundColor: Colors.green,
-          ),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text(jsonData['TEXT'].toString()),
+        //     backgroundColor: Colors.green,
+        //   ),
+        // );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(jsonData['TEXT'].toString()),
-            backgroundColor: Colors.red,
-          ),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text(jsonData['TEXT'].toString()),
+        //     backgroundColor: Colors.red,
+        //   ),
+        // );
       }
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
@@ -101,12 +101,12 @@ class SMSApi {
           body: formData);
       final jsonData = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(jsonData['TEXT'].toString()),
-            backgroundColor: Colors.green,
-          ),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text(jsonData['TEXT'].toString()),
+        //     backgroundColor: Colors.green,
+        //   ),
+        // );
         print('Request sent successfully! ${response.body}');
         return true;
       } else {
@@ -119,7 +119,7 @@ class SMSApi {
     }
   }
 
-  static Future<bool> updateData2(context, sent, uuid, deliver) async {
+  static Future<bool> updateData2(context, sent, uuid, deliver, type) async {
     var url = 'https://dev-alphasms.breelink.com:4444';
     var formData = {
       'apipoint': 'smbupdate',
@@ -127,9 +127,9 @@ class SMSApi {
       'Password': 'abcd1234',
       'UUID': uuid,
       'DEVICEID': '',
-      'RESULT': '',
+      'RESULT': type == 2 ? '$deliver' : '',
       // 'SENT': sent,
-      'DELIVERED': deliver
+      'DELIVERED': type == 1 ? '$deliver' : ''
     };
     print('formData updateData22${formData}');
 
@@ -139,12 +139,12 @@ class SMSApi {
           body: formData);
       final jsonData = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(jsonData['TEXT'].toString()),
-            backgroundColor: Colors.green,
-          ),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text(jsonData['TEXT'].toString()),
+        //     backgroundColor: Colors.green,
+        //   ),
+        // );
         print('Request sent successfully updateData2! ${response.body}//');
         return true;
       } else {
@@ -177,12 +177,12 @@ class SMSApi {
           body: formData);
       final jsonData = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(jsonData['TEXT'].toString()),
-            backgroundColor: Colors.green,
-          ),
-        );
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text(jsonData['TEXT'].toString()),
+        //     backgroundColor: Colors.green,
+        //   ),
+        // );
         print('Request sent successfully updateData2! ${response.body}//');
         return true;
       } else {

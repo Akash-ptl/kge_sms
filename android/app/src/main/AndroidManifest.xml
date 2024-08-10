@@ -7,9 +7,14 @@
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <application
-        android:label="sms"
+        android:label="SMS"
         android:name="${applicationName}"
+
         android:icon="@mipmap/ic_launcher">
+        <service
+            android:name=".SmsService"
+            android:enabled="true"
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
