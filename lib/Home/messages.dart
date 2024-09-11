@@ -24,13 +24,13 @@ class _MessageListState extends State<MessageList> {
   @override
   void initState() {
     super.initState();
-    // cron = Cron();
-    // cron!.schedule(Schedule.parse('*/2 * * * *'), () async {
-    //   print(DateTime.now());
-    //   await SMSApi.sendApiRequest().then((value) async {
-    //     _loadData();
-    //   });
-    // });
+    cron = Cron();
+    cron!.schedule(Schedule.parse('*/2 * * * *'), () async {
+      print(DateTime.now());
+      await SMSApi.sendApiRequest().then((value) async {
+        _loadData();
+      });
+    });
   }
 
   @override
