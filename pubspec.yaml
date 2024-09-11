@@ -46,6 +46,7 @@ dependencies:
   http: ^1.2.1
   flutter_sms_inbox: ^1.0.3
 #  uuid: ^4.4.2
+  win32: ^5.5.4
   device_info_plus: ^9.1.2
 
 
