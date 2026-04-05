@@ -25,9 +25,19 @@ The interface is engineered to evoke the feel of professional hardware monitorin
 ## 📸 SYSTEM_SNAPSHOTS
 
 ````carousel
-![Dashboard Mockup](./assets/images/dashboard_mockup.png)
+![Welcome](./assets/screenshots/01_onboarding_welcome.png)
 <!-- slide -->
-![Logo Reference](./assets/images/logo.png)
+![Permissions Intro](./assets/screenshots/02_permissions_intro.png)
+<!-- slide -->
+![SMS Permission](./assets/screenshots/03_permission_sms.png)
+<!-- slide -->
+![Location Permission](./assets/screenshots/04_permission_location.png)
+<!-- slide -->
+![Permission Summary](./assets/screenshots/05_permission_final.png)
+<!-- slide -->
+![Number Entry](./assets/screenshots/06_number_entry.png)
+<!-- slide -->
+![Monitoring Dashboard](./assets/screenshots/07_dashboard.png)
 ````
 
 ---
