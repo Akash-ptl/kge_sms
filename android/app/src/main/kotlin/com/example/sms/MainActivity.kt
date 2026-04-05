@@ -1,59 +1,3 @@
-//package com.example.sms
-//
-//import android.telephony.SmsManager
-//import android.util.Log
-//import androidx.annotation.NonNull
-//import io.flutter.embedding.android.FlutterActivity
-//import io.flutter.embedding.engine.FlutterEngine
-//import io.flutter.plugin.common.MethodChannel
-//
-//class MainActivity : FlutterActivity() {
-//    companion object {
-//        private val TAG = MainActivity::class.java.simpleName
-//    }
-//
-//    private val methodChannelName = "com.example.sms"
-//    private var methodChannel: MethodChannel? = null
-//    private var result: MethodChannel.Result? = null
-//
-//    override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
-//        super.configureFlutterEngine(flutterEngine)
-//        methodChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, methodChannelName)
-//        methodChannel!!.setMethodCallHandler { call, result ->
-//            when (call.method) {
-//                "sendSMS" -> {
-//                    Log.d(TAG, "sendSMSsendSMS:1")
-//                    val num: String? = call.argument("mobileNumber")
-//                    val msg: String? = call.argument("message")
-//                    val subscriptionId: String? = call.argument("subscriptionId")
-//                    val _result = this.sendSMS(num, msg, subscriptionId, result)
-//                    if (_result != null) {
-//                        result.success("SMS Sent")
-//                    } else {
-//                        result.error("Err", "Sms Not Sent", "")
-//                    }
-//                }
-//            }
-//        }
-//        super.configureFlutterEngine(flutterEngine)
-//    }
-//
-//    private fun sendSMS(
-//        phoneNo: String?,
-//        msg: String?,
-//        subscriptionId: String?,
-//        result: MethodChannel.Result?
-//    ): String? {
-//        try {
-//            val smsManager = SmsManager.getSmsManagerForSubscriptionId(subscriptionId?.toInt() ?: 0)
-//            smsManager.sendTextMessage(phoneNo, null, msg, null, null)
-//            return "SMS Sent"
-//        } catch (ex: Exception) {
-//            ex.printStackTrace()
-//            return null
-//        }
-//    }
-//}
 package com.example.sms
 
 import android.app.PendingIntent
@@ -77,7 +21,7 @@ class MainActivity : FlutterActivity() {
     private val methodChannelName = "com.example.sms"
     private var methodChannel: MethodChannel? = null
     private var result: MethodChannel.Result? = null
-    private lateinit var smsSentReceiver: BroadcastReceiver
+    private var smsSentReceiver: BroadcastReceiver? = null
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -85,16 +29,16 @@ class MainActivity : FlutterActivity() {
         methodChannel!!.setMethodCallHandler { call, result ->
             when (call.method) {
                 "sendSMS" -> {
-                    Log.d(TAG, "sendSMSsendSMS:1")
+                    Log.d(TAG, "sendSMS: Starting process")
                     val num: String? = call.argument("mobileNumber")
                     val msg: String? = call.argument("message")
                     val subscriptionId: String? = call.argument("subscriptionId")
                     this.result = result
                     sendSMS(num, msg, subscriptionId)
                 }
+                else -> result.notImplemented()
             }
         }
-        super.configureFlutterEngine(flutterEngine)
     }
 
     private fun sendSMS(
@@ -103,13 +47,24 @@ class MainActivity : FlutterActivity() {
         subscriptionId: String?
     ) {
         try {
-            val smsManager = SmsManager.getSmsManagerForSubscriptionId(subscriptionId?.toInt() ?: 0)
-            val sentIntent = Intent(SMS_SENT_ACTION)
+            val subId = subscriptionId?.toIntOrNull() ?: 0
+            val smsManager = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                this.getSystemService(SmsManager::class.java).createForSubscriptionId(subId)
+            } else {
+                @Suppress("DEPRECATION")
+                SmsManager.getSmsManagerForSubscriptionId(subId)
+            }
+            
+            val sentIntent = Intent(SMS_SENT_ACTION).apply {
+                @Suppress("DEPRECATION")
+                `package` = packageName
+            }
             val sentPI = PendingIntent.getBroadcast(this, 0, sentIntent, PendingIntent.FLAG_IMMUTABLE)
             smsManager.sendTextMessage(phoneNo, null, msg, sentPI, null)
         } catch (ex: Exception) {
-            ex.printStackTrace()
-            result?.error("Err", "Sms Not Sent", "")
+            Log.e(TAG, "Error sending SMS", ex)
+            result?.error("Err", "Sms Not Sent: ${ex.message}", null)
+            result = null
         }
     }
 
@@ -118,20 +73,29 @@ class MainActivity : FlutterActivity() {
         smsSentReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 if (intent.action == SMS_SENT_ACTION) {
-                    val resultCode = resultCode
                     if (resultCode == RESULT_OK) {
                         result?.success("SMS Sent")
                     } else {
-                        result?.error("Err", "Sms Not Sent", "")
+                        result?.error("Err", "Sms Not Sent. Result code: $resultCode", null)
                     }
+                    result = null
                 }
             }
         }
-        registerReceiver(smsSentReceiver, IntentFilter(SMS_SENT_ACTION))
+        val filter = IntentFilter(SMS_SENT_ACTION)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(smsSentReceiver, filter, RECEIVER_NOT_EXPORTED)
+        } else {
+            @Suppress("UnspecifiedRegisterReceiverFlag")
+            registerReceiver(smsSentReceiver, filter)
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        unregisterReceiver(smsSentReceiver)
+        smsSentReceiver?.let {
+            unregisterReceiver(it)
+            smsSentReceiver = null
+        }
     }
 }

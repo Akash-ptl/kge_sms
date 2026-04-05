@@ -12,7 +12,7 @@ String getSmbDataToJson(GetSmbData data) => json.encode(data.toJson());
 class GetSmbData {
   String? status;
   String? response;
-  List<Row>? rows;
+  List<SmsRow>? rows;
 
   GetSmbData({
     this.status,
@@ -25,7 +25,7 @@ class GetSmbData {
         response: json["RESPONSE"],
         rows: json["ROWS"] == null
             ? []
-            : List<Row>.from(json["ROWS"]!.map((x) => Row.fromJson(x))),
+            : List<SmsRow>.from(json["ROWS"]!.map((x) => SmsRow.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -37,7 +37,7 @@ class GetSmbData {
       };
 }
 
-class Row {
+class SmsRow {
   String? smbDataId;
   String? uuid;
   String? senderid;
@@ -50,9 +50,10 @@ class Row {
   String? result;
   String? deviceid;
   String? marksent;
+  String? status;
   DateTime? edrInsertTime;
 
-  Row({
+  SmsRow({
     this.smbDataId,
     this.uuid,
     this.senderid,
@@ -65,10 +66,11 @@ class Row {
     this.result,
     this.deviceid,
     this.marksent,
+    this.status,
     this.edrInsertTime,
   });
 
-  factory Row.fromJson(Map<String, dynamic> json) => Row(
+  factory SmsRow.fromJson(Map<String, dynamic> json) => SmsRow(
         smbDataId: json["SMBDataID"],
         uuid: json["UUID"],
         senderid: json["SENDERID"],

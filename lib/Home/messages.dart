@@ -6,14 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sms_inbox/flutter_sms_inbox.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sim_data/sim_model.dart';
-import 'package:sms/Api/api.dart';
-import 'package:sms/utils/const.dart';
+import 'package:flutter_sim_data/sim_data.dart';
+import 'package:flutter_sim_data/sim_data_model.dart';
+import 'package:vantage_gateway/Api/api.dart';
+import 'package:vantage_gateway/utils/const.dart';
 import '../global.dart';
 
 class MessageList extends StatefulWidget {
   const MessageList({super.key, required this.simCard});
-  final List<SimCard> simCard;
+  final List<SimDataModel> simCard;
   @override
   State<MessageList> createState() => _MessageListState();
 }
