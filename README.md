@@ -1,6 +1,6 @@
 # 🛡️ VANTAGE_GATEWAY
 
-![Hero Banner](/Users/akashptl/.gemini/antigravity/brain/13d2c1f0-7036-4e14-b642-d213614bee4a/vantage_hero_banner_1775360105819.png)
+![Hero Banner](./assets/images/hero_banner.png)
 
 ## 📡 PROJECT_OVERVIEW
 **Vantage Gateway** is a professional-grade, high-performance SMS Monitoring Node designed for enterprise-level telemetry and hardware-level signal auditing. Built with a futuristic, industrial aesthetic, it transforms a standard Android device into a critical piece of gateway infrastructure.
@@ -25,9 +25,9 @@ The interface is engineered to evoke the feel of professional hardware monitorin
 ## 📸 SYSTEM_SNAPSHOTS
 
 ````carousel
-![Dashboard Mockup](/Users/akashptl/.gemini/antigravity/brain/13d2c1f0-7036-4e14-b642-d213614bee4a/vantage_dashboard_mockup_1775360083125.png)
+![Dashboard Mockup](./assets/images/dashboard_mockup.png)
 <!-- slide -->
-![Logo Reference](/Users/akashptl/.gemini/antigravity/brain/13d2c1f0-7036-4e14-b642-d213614bee4a/vantage_gateway_logo_1775360024735.png)
+![Logo Reference](./assets/images/logo.png)
 ````
 
 ---
