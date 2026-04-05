@@ -24,21 +24,19 @@ The interface is engineered to evoke the feel of professional hardware monitorin
 
 ## 📸 SYSTEM_SNAPSHOTS
 
-````carousel
-![Welcome](./assets/screenshots/01_onboarding_welcome.png)
-<!-- slide -->
-![Permissions Intro](./assets/screenshots/02_permissions_intro.png)
-<!-- slide -->
-![SMS Permission](./assets/screenshots/03_permission_sms.png)
-<!-- slide -->
-![Location Permission](./assets/screenshots/04_permission_location.png)
-<!-- slide -->
-![Permission Summary](./assets/screenshots/05_permission_final.png)
-<!-- slide -->
-![Number Entry](./assets/screenshots/06_number_entry.png)
-<!-- slide -->
-![Monitoring Dashboard](./assets/screenshots/07_dashboard.png)
-````
+## 📸 SYSTEM_SNAPSHOTS
+
+| Welcome | Permissions | SMS Audit |
+|--|--|--|
+| ![Welcome](./assets/screenshots/01_onboarding_welcome.png) | ![Permissions](./assets/screenshots/02_permissions_intro.png) | ![SMS](./assets/screenshots/03_permission_sms.png) |
+
+| Location | Permissions Final | Number Entry |
+|--|--|--|
+| ![Location](./assets/screenshots/04_permission_location.png) | ![Final](./assets/screenshots/05_permission_final.png) | ![Entry](./assets/screenshots/06_number_entry.png) |
+
+| Monitoring Dashboard |
+|--|
+| ![Dashboard](./assets/screenshots/07_dashboard.png) |
 
 ---
 
