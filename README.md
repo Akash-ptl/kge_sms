@@ -28,15 +28,15 @@ The interface is engineered to evoke the feel of professional hardware monitorin
 
 | Welcome | Permissions | SMS Audit |
 |--|--|--|
-| ![Welcome](./assets/screenshots/01_onboarding_welcome.png) | ![Permissions](./assets/screenshots/02_permissions_intro.png) | ![SMS](./assets/screenshots/03_permission_sms.png) |
+| <img src="./assets/screenshots/01_onboarding_welcome.png" width="300"> | <img src="./assets/screenshots/02_permissions_intro.png" width="300"> | <img src="./assets/screenshots/03_permission_sms.png" width="300"> |
 
 | Location | Permissions Final | Number Entry |
 |--|--|--|
-| ![Location](./assets/screenshots/04_permission_location.png) | ![Final](./assets/screenshots/05_permission_final.png) | ![Entry](./assets/screenshots/06_number_entry.png) |
+| <img src="./assets/screenshots/04_permission_location.png" width="300"> | <img src="./assets/screenshots/05_permission_final.png" width="300"> | <img src="./assets/screenshots/06_number_entry.png" width="300"> |
 
 | Monitoring Dashboard |
 |--|
-| ![Dashboard](./assets/screenshots/07_dashboard.png) |
+| <img src="./assets/screenshots/07_dashboard.png" width="600"> |
 
 ---
 
