@@ -1,30 +1,18 @@
-# 🛡️ VANTAGE_GATEWAY
+# KGE SMS Gateway (Vantage Gateway)
 
-![Hero Banner](./assets/images/hero_banner.png)
+A high-performance Flutter application that transforms an Android device into a professional SMS monitoring and telemetry node.
 
-## 📡 PROJECT_OVERVIEW
-**Vantage Gateway** is a professional-grade, high-performance SMS Monitoring Node designed for enterprise-level telemetry and hardware-level signal auditing. Built with a futuristic, industrial aesthetic, it transforms a standard Android device into a critical piece of gateway infrastructure.
+## 📡 Overview
+Vantage Gateway is designed to monitor SMS traffic, audit SIM card hardware, and broadcast GPS telemetry. It is built for reliability and runs as a foreground service to ensure constant uptime.
 
-### ⚡ KEY_FEATURES
-- **Hardware-Level Auditing**: Real-time manifest scanning for SIM carrier data and cellular network state.
-- **Circuit-Integrated UI**: High-fidelity dashboard featuring PCB-inspired circuit animations and technical grid overlays.
-- **Master Node Control**: Single-toggle master power management for unified system activation.
-- **Automated Data Beacons**: Configurable GPS telemetry broadcast system with scheduled transmission intervals.
-- **Live Transmission Logs**: Real-time terminal-style logging for auditing every uplink and downlink signal.
+## ⚡ Key Features
+- **SMS Monitoring**: Real-time tracking and logging of incoming and outgoing SMS messages.
+- **SIM Hardware Auditing**: Access detailed information about the SIM carrier and cellular network state.
+- **GPS Telemetry**: Automatically send location updates at configurable time intervals.
+- **Background Service**: Uses Android Foreground Services to stay active even when the app is in the background.
+- **Industrial Dashboard**: A clean, technical interface for monitoring all system activities in real-time.
 
----
-
-## 🎨 DESIGN_PHILOSOPHY
-The interface is engineered to evoke the feel of professional hardware monitoring equipment. Replaces generic UI patterns with:
-- **Industrial Corner Brackets**: Providing a structured, modular hardware look.
-- **Emerald Pulse Aesthetics**: High-visibility status indicators and accent glows.
-- **Share Tech Mono Typography**: Ensuring perfect technical readability.
-
----
-
-## 📸 SYSTEM_SNAPSHOTS
-
-## 📸 SYSTEM_SNAPSHOTS
+## 📸 Screenshots
 
 | Welcome | Permissions | SMS Audit |
 |--|--|--|
@@ -38,37 +26,26 @@ The interface is engineered to evoke the feel of professional hardware monitorin
 |--|
 | <img src="./assets/screenshots/07_dashboard.png" width="600"> |
 
----
-
-## 🛠️ TECHNICAL_STACK
+## 🛠️ Tech Stack
 - **Framework**: Flutter (Dart)
-- **State Management**: GetX (Reactive Architecture)
+- **State Management**: GetX
+- **Native Integration**: Kotlin (Method Channels for SMS & SIM data)
+- **Background Tasks**: Flutter Foreground Task
 - **Animations**: Flutter Animate
-- **Hardware Bridge**: Native Android SMS & SIM Callbacks
-- **Persistence**: Shared Preferences
 
----
-
-## 🚀 INSTALLATION_PROTOCOL
-1. **Clone Repository**:
+## 🚀 Getting Started
+1. **Clone the project**:
    ```bash
-   git clone https://github.com/your-username/vantage-gateway.git
+   git clone https://github.com/Akash-ptl/kge_sms.git
    ```
-2. **Install Dependencies**:
+2. **Install dependencies**:
    ```bash
    flutter pub get
    ```
-3. **Execute Node**:
+3. **Run the app**:
    ```bash
    flutter run
    ```
 
 ---
-
-> [!IMPORTANT]
-> **Vantage Gateway** requires foreground service permissions and high-accuracy location access to maintain persistent node activity in standby mode.
-
----
-
-**Developed for high-performance telemetry auditing.**  
-*Vantage Gateway © 2026. All Systems Operational.*
+**Note**: This app requires SMS, SIM, and Location permissions to function correctly as a gateway node.
